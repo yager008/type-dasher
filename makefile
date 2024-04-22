@@ -1,2 +1,4 @@
 hello:
-	docker compose up -d
+	docker compose up -d;
+app:
+	docker exec -it app bash;

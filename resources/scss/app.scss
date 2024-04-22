@@ -1,0 +1,31 @@
+$blue: #6699FF;
+$white: #FFFFFF;
+
+body {
+    background-color: $blue;
+    color: $white;
+    font-family: 'Droid Sans', sans-serif;
+    text-align: center;
+
+    h1 {
+        font-size: 2.5em;
+    }
+
+    ul {
+        padding: 0;
+        font-size: 2em;
+
+        li {
+            display: inline-block;
+            width: 1.2em;
+
+            &.grow {
+                transition: all .2s ease-in-out;
+
+                &:hover {
+                    transform: scale(1.5);
+                }
+            }
+        }
+    }
+}
