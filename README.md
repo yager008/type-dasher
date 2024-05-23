@@ -7,3 +7,4 @@ SETUP:
 5. app/php artisan key:generate
 6. app/sudo chmod 777 -R ./
 7. php artisan migrate
+8. congrats
