@@ -2,9 +2,9 @@ SETUP:
 1. docker compose build
 2. docker compose up
 3. create env file <br>
-DP_CONNECTION = mysql <br>
-DP_PORT = 3306 <br>
-DP_HOST = db <br>
+DB_CONNECTION = mysql <br>
+DB_PORT = 3306 <br>
+DB_HOST = db <br>
 DB_PASSWORD <br>
 
 4. app/composer install
