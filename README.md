@@ -11,3 +11,5 @@ DB_PASSWORD <br>
 5. app/php artisan key:generate
 6. app/sudo chmod 777 -R ./
 7. php artisan migrate
+
+if you want to change default port of nginx, you should do it in app_my_nginx
