@@ -6,6 +6,7 @@ use App\Models\saved_text;
 use App\Models\SavedTexts;
 use App\Models\Test;
 use App\Models\type_result;
+use App\Models\TypeResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -55,7 +56,7 @@ class TypeTestController extends Controller
         $bestSpeed = Session::get('bestSpeed');
         $savedTextID = Session::get('savedTextID');
 
-        $latest_type_result_speed = TypeResults::latest('id')->first()->result;
+        $latest_type_result_speed = TypeResult::latest('id')->first()->result;
 
         if ($bSavedTextUpdate) {
 //            Session::remove('savedText');
