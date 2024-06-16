@@ -1,22 +1,29 @@
-SETUP:
-1. docker compose build
-2. docker compose up
-3. create env file
-   !!! DP_PORT = 3306!!!
-4. app/composer install
-5. app/php artisan key:generate
-6. app/sudo chmod 777 -R ./
-7. php artisan migrate
-8. congrats
+First time setup:
+1. docker compose up --build
+2. create env file
+   DB_CONNECTION = mysql <br>
+   DB_PORT = 3306 <br>
+   DB_HOST = db <br>
+   DB_PASSWORD <br>
 
-Breeze:
-composer require laravel/breeze --dev
-php artisan breeze:install
-php artisan migrate
-npm install
-npm run dev
+3. app/composer install
+4. app/php artisan key:generate
+5. app/sudo chmod 777 -R ./
+6. php artisan migrate
+7. Start vite: npm run dev -- --host 0.0.0.0
 
-9. Start vite:
-npm run dev --host
+Next time setup:
+1. docker compose up --build
+2. docker exec -it app bash/npm run dev -- --host 0.0.0.0
 
-npm run dev -- --host 0.0.0.0
+SEEDER: <br>
+php artisan db:seed --class=SavedTextsTableSeeder <br>
+php artisan db:seed --class=TypeResultsTableSeeder
+
+
+   Breeze:
+   composer require laravel/breeze --dev
+   php artisan breeze:install
+   php artisan migrate
+   npm install
+   npm run dev
