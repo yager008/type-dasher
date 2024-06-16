@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class TypeResult extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 }
