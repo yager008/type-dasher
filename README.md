@@ -8,3 +8,15 @@ SETUP:
 6. app/sudo chmod 777 -R ./
 7. php artisan migrate
 8. congrats
+
+Breeze:
+composer require laravel/breeze --dev
+php artisan breeze:install
+php artisan migrate
+npm install
+npm run dev
+
+9. Start vite:
+npm run dev --host
+
+npm run dev -- --host 0.0.0.0
