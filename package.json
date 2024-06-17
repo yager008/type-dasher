@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@cubejs-client/core": "^0.31.0",
+        "bootstrap": "^5.3.3",
         "cal-heatmap": "^4.2.4",
         "chart.js": "^4.0.0"
     }

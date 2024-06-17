@@ -20,7 +20,7 @@ class TypeResultSeeder extends Seeder
 
         for($i = 0; $i < 100; $i++) {
             DB::table('type_results')->insert([
-                'user_id' => 3,
+                'user_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
                 'result' => $faker->numberBetween(200, 500),

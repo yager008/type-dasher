@@ -16,8 +16,7 @@ use Illuminate\Support\Str;
 
 
 Route::get('/', function () {
-//    return redirect()->route('login');
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::middleware('auth')->group(function () {

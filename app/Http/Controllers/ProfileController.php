@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\SavedText;
+use App\Models\TypeResult;
 
 class ProfileController extends Controller
 {
@@ -16,6 +18,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
@@ -24,15 +27,22 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
+
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
+        //почему-то без этого не работает -_-
+        $request->user()->timezone = $request->timezone;
+
         $request->user()->save();
+
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -54,6 +64,30 @@ class ProfileController extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        return Redirect::to('/');
+    }
+
+
+    public function reset(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+
+        SavedText::where('user_id', $user->id)->delete();
+
+        // Delete records from type_results table
+        TypeResult::where('user_id', $user->id)->delete();
+
+        return Redirect::to('/dashboard');
+    }
+
+    public function changeTimeZone(Request $request): RedirectResponse
+    {
+
 
         return Redirect::to('/');
     }

@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\saved_text;
-use App\Models\SavedTexts;
-use App\Models\Test;
-use App\Models\type_result;
+use App\Models\SavedText;
 use App\Models\TypeResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -56,7 +53,12 @@ class TypeTestController extends Controller
         $bestSpeed = Session::get('bestSpeed');
         $savedTextID = Session::get('savedTextID');
 
-        $latest_type_result_speed = TypeResult::latest('id')->first()->result;
+        if(isset(TypeResult::latest('id')->first()->result)) {
+           $latest_type_result_speed = TypeResult::latest('id')->first()->result;
+        }
+        else {
+            $latest_type_result_speed = 0;
+        }
 
         if ($bSavedTextUpdate) {
 //            Session::remove('savedText');
@@ -101,7 +103,7 @@ class TypeTestController extends Controller
         Session::remove('bFromStoreResult');
 
         // $type_results = type_result::pluck('result')->toArray();
-        $type_results = type_result::where('user_id', auth::user()['id'])
+        $type_results = TypeResult::where('user_id', auth::user()['id'])
             ->get(['updated_at', 'result', 'number_of_mistakes']);
 
         // Transform the results into an associative array
@@ -115,8 +117,7 @@ class TypeTestController extends Controller
 
         })->toArray();
 
-//        $saved_texts = saved_text::all();
-        $saved_texts = saved_text::where('user_id', auth::user()['id'])
+        $saved_texts = SavedText::where('user_id', auth::user()['id'])
             ->get(['id', 'text', 'text_name', 'best_speed']);
 
         $name = auth()->user();
@@ -128,7 +129,7 @@ class TypeTestController extends Controller
     {
 
         // $type_results = type_result::pluck('result')->toArray();
-        $type_results = type_result::where('user_id', auth::user()['id'])
+        $type_results = TypeResult::where('user_id', auth::user()['id'])
             ->get(['updated_at', 'result', 'number_of_mistakes']);
 
         // Transform the results into an associative array
@@ -147,7 +148,7 @@ class TypeTestController extends Controller
 
     public function savedTexts()
     {
-        $saved_texts = saved_text::where('user_id', auth::user()['id'])
+        $saved_texts = SavedText::where('user_id', auth::user()['id'])
             ->get(['id', 'text', 'text_name', 'best_speed']);
 
         return view('savedTexts', compact('saved_texts'));
@@ -187,7 +188,7 @@ class TypeTestController extends Controller
 
         if ($data['savedTextId'] !== null) {
             Session::put('bSavedTextUpdate', 'true');
-            $savedText = saved_text::find($data['savedTextId']);
+            $savedText = SavedText::find($data['savedTextId']);
 
             $currentBestSpeed = $savedText->best_speed;
             Session::put('previousBestSpeed', $currentBestSpeed);
@@ -198,7 +199,7 @@ class TypeTestController extends Controller
             }
         }
 
-        type_result::create([
+        TypeResult::create([
             'result' => $data['outputSpeed'],
             'username' => auth()->user()['name'],
             'user_id' => auth()->user()['id'],
@@ -213,7 +214,7 @@ class TypeTestController extends Controller
     {
         $buttonValue = $request->request->get('saved_text_delete_btn');
 
-        saved_text::destroy($buttonValue);
+        SavedText::destroy($buttonValue);
 
         return redirect()->route("TypeTestController.savedTexts");
     }
@@ -238,7 +239,7 @@ class TypeTestController extends Controller
         if (isset($data['checkbox'])) {
             Session::put('bUpdateMode', true);
 
-            $saved_text = SavedTexts::create([
+            $saved_text = SavedText::create([
                 'text' => $data['inputTextBox'],
                 'text_name' => $data['savedTextName'],
                 'user_id' => auth()->user()['id']

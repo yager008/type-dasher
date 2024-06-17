@@ -14,7 +14,6 @@
 </script>
 
 <?php
-//echo auth()->user()['timezone'];
 
     //сетим див с текстом из апи
 if (!empty($textToCompare)) {
@@ -27,7 +26,6 @@ if (!empty($textToCompare)) {
 }
 echo "</div>";
 
-    //сетим таймер
 if (isset($bShouldStartTimer) && $bShouldStartTimer) {
 ?>
 <script>
@@ -36,29 +34,22 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
         StartTimer();
     });
 </script>
-
 <?php
 }
 ?>
 
 <x-app-layout>
 
-<!-- Dialog Box for result -->
 <dialog id="dialogBox" class="content-around">
     <div class="flex justify-center items-center h-full flex-col">
-
         <p>Your speed result:</p>
         <p id="dialogMessage" class="inline"></p>
         <p>symbols/second</p>
-
         <br>
         <button onclick="closeDialog()" class="bg-blue-900 ">Close</button>
     </div>
 
 </dialog>
-
-
-
 
 <script>
     if({{$bShowDialogBoxWithResult}}) {
@@ -78,9 +69,9 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
             <input type="text" id="timer" name="timer" readonly style="">
             <input type="text" id="numberOfMistakes" name="numberOfMistakes" readonly style="">
             <label>
-                <input type="text" name="savedTextId" id="savedTextId" value=" {{ (isset($idOfSavedText))?$idOfSavedText:'' }}" style="visibility: ">
+                <input type="text" name="savedTextId" id="savedTextId" value=" {{ (isset($idOfSavedText))?$idOfSavedText:'' }}" style="">
             </label>
-            <input type="submit" id="submitTimeButton" name="submitTimeButton" style="hidden">
+            <input type="submit" id="submitTimeButton" name="submitTimeButton" style="">
         </form>
     </div>
 
@@ -88,7 +79,7 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
         <form method="POST" action="{{ route('BibleApiController.index') }}">
             @csrf
             <label>
-                <button name="BibleButton" id="BibleButton">
+                <button name="BibleButton" id="BibleButton" class="btn btn-primary">
                     RandomBibleVerse
                 </button>
             </label>
@@ -97,7 +88,7 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
         <form method="POST" action="{{ route('LoremApiController.index') }}">
             @csrf
             <label>
-                <button name="LoremButton" id="LoremButton">
+                <button name="LoremButton" id="LoremButton" class="btn btn-primary">
                     LoremButton
                 </button>
             </label>
@@ -105,10 +96,6 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
 
         <form autocomplete="off" method="POST" action="{{ route('TypeTestController.storeSavedTextIfCheckBoxIsOn') }}">
             @csrf
-
-{{--            <label>--}}
-{{--                <input type="text" name="savedTextName" id="savedTextName" placeholder="name of text to save" style="visibility: hidden" >--}}
-{{--            </label>--}}
 
             <div id='textNameDiv' class="container mx-auto p-4" style="visibility: hidden">
                     <label for="savedTextName" class="block text-gray-700 text-sm font-bold mb-2">Enter text (max 15 characters):</label>
@@ -139,25 +126,25 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
             </label>
 
             <label>
-                <input type="submit" name="submitInputTextBoxButton" id="submitInputTextBoxButton">
+                <input type="submit" name="submitInputTextBoxButton" id="submitInputTextBoxButton" class="btn btn-primary">
             </label>
         </form>
     </div>
     <div>
         <label for="typeTextInputField"></label>
-        <input autocomplete="off" type="text" id="typeTextInputField" class="form-control w-300 p-3 mw-100"
+        <input autocomplete="off" type="text" id="typeTextInputField" class="form-control p-3 "
                oninput="window.typeTextInputFieldUpdated()" style="width: 800px; ">
     </div>
     <div>
         <br><br>
-        <p id="debug_typedTextOutputDisplayNone" style="display: "></p>
+        <!-- debug typed text -->
+        <p id="debug_typedTextOutputDisplayNone" style="display: none"></p>
     </div>
-    <div>
+    <div id="chars wrapper" style="width: 770px">
         @include('type_components.text_to_type_in_dynamic_color_chars')
     </div>
 </div>
 
-{{--@include('type_components.type_results_table');--}}
 
 <!-- bootstrap scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -198,17 +185,6 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
             textId.value = textID.value;
         }
     });
-    // no more than 15 symbols in name of text
-
-    // const newTextName = document.getElementById('savedTextName')
-    // const alert = document.getElementById('alert');
-
-    // alert("hello");
-
-
-    // function closeAlert() {
-    //     document.getElementById('alert').classList.add('hidden');
-    // }
 
     //hide open saved text name
     const checkbox = document.getElementById('checkbox')
@@ -237,7 +213,6 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
     function closeAlert() {
         alertDiv.classList.add('hidden');
     }
-</script>
 </script>
 
 </x-app-layout>
