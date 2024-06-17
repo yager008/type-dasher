@@ -131,20 +131,33 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
         </form>
     </div>
     <div>
+
+{{--        <div class="form__group field">--}}
+{{--            <input type="input" class="form__field" placeholder="Name" name="name" id='name' required />--}}
+{{--            <label for="name" class="form__label">Name</label>--}}
+
+{{--            <label for="typeTextInputField"></label>--}}
+{{--            <input class="form__field" autocomplete="off" type="text" id="typeTextInputField">--}}
+{{--                   oninput="window.typeTextInputFieldUpdated()" style="width: 800px; ">--}}
+
+{{--        </div>--}}
         <label for="typeTextInputField"></label>
-        <input autocomplete="off" type="text" id="typeTextInputField" class="form-control p-3 "
-               oninput="window.typeTextInputFieldUpdated()" style="width: 800px; ">
+        <input class="form__field" autocomplete="off" type="input" id="typeTextInputField"
+        oninput="window.typeTextInputFieldUpdated()" style="width: 800px; ">
+
+{{--        <label for="typeTextInputField"></label>--}}
+{{--        <input autocomplete="off" type="text" id="typeTextInputField" class="form-control p-3 "--}}
+{{--               oninput="window.typeTextInputFieldUpdated()" style="width: 800px; ">--}}
     </div>
     <div>
         <br><br>
         <!-- debug typed text -->
         <p id="debug_typedTextOutputDisplayNone" style="display: none"></p>
     </div>
-    <div id="chars wrapper" style="width: 770px">
+    <div id="chars wrapper" style="width: 770px;">
         @include('type_components.text_to_type_in_dynamic_color_chars')
     </div>
 </div>
-
 
 <!-- bootstrap scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

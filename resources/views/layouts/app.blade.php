@@ -21,12 +21,12 @@
           crossorigin="anonymous">
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/sass/app.scss'])
     <!-- Include any additional JavaScript scripts here -->
 
 </head>
 <body class="font-sans antialiased">
-<div class="bg-gray-100 dark:bg-gray-800">
+<div id="page" class="bg-gray-100 dark:bg-gray-800">
     @include('layouts.navigation') <!-- Include your navigation partial -->
 
     <!-- Page Heading -->
