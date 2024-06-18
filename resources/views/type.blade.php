@@ -16,9 +16,12 @@
 <?php
 
     //сетим див с текстом из апи
+
 if (!empty($textToCompare)) {
-    echo "<div style='display: none';>";
+    echo "<div style='display: n';>";
+//    текст с которым сравнивается инпут при каждом напечатанном символе
     echo "textToCompare: <div id='textToCompare'>{$textToCompare}</div><br>";
+
     $lenOfCompareText = strlen($textToCompare);
     echo "<div style='float: left';> Length of compare text:</div> <div id='lenOfFullText';> {$lenOfCompareText}</div> <br>";
 } else {
@@ -168,6 +171,7 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
 <form id="exitSavedTextModeForm" action="{{ route('TypeTestController.exitSavedTextMode') }}" method="POST" style="display: none;">
     @csrf
 </form>
+    <div id="numberOfCharsLeft" style="color:#11998e">92</div>
 
 <script>
     //выходо из сейвд текст мода
@@ -226,6 +230,28 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
     function closeAlert() {
         alertDiv.classList.add('hidden');
     }
+
+    const numberOfCharsLeft = document.getElementById('numberOfCharsLeft');
+    const textToCompareFromDiv = document.getElementById('textToCompare');
+
+    typeTextInputField.addEventListener('input', function () {
+        const numberOfCharsLeftInLine = 94 - typeTextInputField.value.length;
+        numberOfCharsLeft.innerText = numberOfCharsLeftInLine.toString();
+
+        const nextLine = document.querySelector('span.line');
+
+        if (numberOfCharsLeftInLine === 0) {
+
+            typeTextInputField.value = ' ';
+
+            textToCompareFromDiv.innerText = textToCompareFromDiv.innerText.substring(94);
+            // nextLine.style='display: none';
+
+
+        }
+
+
+    })
 </script>
 
 </x-app-layout>

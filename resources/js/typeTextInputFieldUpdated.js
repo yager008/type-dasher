@@ -18,7 +18,7 @@ export function typeTextInputFieldUpdated() {
 
 
     // сетим дебаг див
-    document.getElementById('debug_typedTextOutputDisplayNone').innerText = typeTextInputFieldValue;
+    // document.getElementById('debug_typedTextOutputDisplayNone').innerText = typeTextInputFieldValue;
 
     //каждый текст апдейт красим все чары в синий цвет
     for (let i = 0; i < textToCompare.length; ++i) {
@@ -26,8 +26,7 @@ export function typeTextInputFieldUpdated() {
     }
 
 
-
-    //пробегаемся по всем напечатанным буквам
+    //пробегаемся по всем напечатанным буква
     for (let i = 0; i < typeTextInputFieldValueLength; ++i) {
         console.log("typeTextInputFieldValueLength: " + typeTextInputFieldValue);
         // если буква выбрана правильно
