@@ -18,7 +18,7 @@
     //сетим див с текстом из апи
 
 if (!empty($textToCompare)) {
-    echo "<div style='display: n';>";
+    echo "<div style='display: none';>";
 //    текст с которым сравнивается инпут при каждом напечатанном символе
     echo "textToCompare: <div id='textToCompare'>{$textToCompare}</div><br>";
 
@@ -124,7 +124,7 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
             </label>
 
             <label>
-                <input type="text" name="savedTextID" id="savedTextID" style="display: non"
+                <input type="text" name="savedTextID" id="savedTextID" style="display: none"
                     value="{{(isset($savedTextID))?$savedTextID:''}}">
             </label>
 
@@ -171,7 +171,10 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
 <form id="exitSavedTextModeForm" action="{{ route('TypeTestController.exitSavedTextMode') }}" method="POST" style="display: none;">
     @csrf
 </form>
+
     <div id="numberOfCharsLeft" style="color:#11998e">92</div>
+
+    <div id="numberOfLine" style="color:#11998e">1</div>
 
 <script>
     //выходо из сейвд текст мода
@@ -231,26 +234,26 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
         alertDiv.classList.add('hidden');
     }
 
-    const numberOfCharsLeft = document.getElementById('numberOfCharsLeft');
-    const textToCompareFromDiv = document.getElementById('textToCompare');
+    // const numberOfCharsLeft = document.getElementById('numberOfCharsLeft');
+    // const textToCompareFromDiv = document.getElementById('textToCompare');
+    // let numberOfLine = 1;
+    // let numberOfCharsInCurrentLine = document.getElementById('numberOfCharsInLine' + numberOfLine);
 
     typeTextInputField.addEventListener('input', function () {
-        const numberOfCharsLeftInLine = 94 - typeTextInputField.value.length;
-        numberOfCharsLeft.innerText = numberOfCharsLeftInLine.toString();
-
-        const nextLine = document.querySelector('span.line');
-
-        if (numberOfCharsLeftInLine === 0) {
-
-            typeTextInputField.value = ' ';
-
-            textToCompareFromDiv.innerText = textToCompareFromDiv.innerText.substring(94);
-            // nextLine.style='display: none';
-
-
-        }
-
-
+        // const numberOfCharsLeftInLine = numberOfCharsInCurrentLine.innerText - typeTextInputField.value.length;
+        // numberOfCharsLeft.innerText = numberOfCharsLeftInLine.toString();
+        //
+        // const nextLine = document.querySelector('span.line');
+        //
+        // if (numberOfCharsLeftInLine === 0) {
+        //
+        //     typeTextInputField.value = '';
+        //
+        //     textToCompareFromDiv.innerText = textToCompareFromDiv.innerText.substring(Number(numberOfCharsInCurrentLine.innerText));
+        //     // nextLine.style='display: none';
+        //     numberOfLine++;
+        //     numberOfCharsInCurrentLine = document.getElementById('numberOfCharsInLine' + numberOfLine);
+        // }
     })
 </script>
 

@@ -3,13 +3,21 @@ import {textTyped} from "./textTyped.js";
 let numberOfMistakes= 0;
 let bTypeTextCorrect= true;
 let mistakeAlreadyDetected = false;
+let numberOfAlreadyTypedChars = 0;
+
+const numberOfCharsLeft = document.getElementById('numberOfCharsLeft');
+const textToCompareFromDiv = document.getElementById('textToCompare');
+let numberOfLine = 1;
+let numberOfCharsInCurrentLine = document.getElementById('numberOfCharsInLine' + numberOfLine);
 
 export function typeTextInputFieldUpdated() {
     console.log("bTypeTextCorrect: " + bTypeTextCorrect);
     console.log("numberOfMistakes: " + numberOfMistakes);
+    console.log("numberOfLine: " + numberOfLine);
 
     let textToCompare = document.getElementById('textToCompare').textContent;
     let typeTextInputFieldValue = document.getElementById('typeTextInputField').value;
+    let typeTextInputField = document.getElementById('typeTextInputField');
     let numberOfMistakesMakeTextInput= document.getElementById('numberOfMistakes');
 
 //    let inputTextChar = typeTextInputFieldValue.toString().charAt(1); ? вроде нигде не юзается
@@ -17,20 +25,55 @@ export function typeTextInputFieldUpdated() {
     let currentMistakeDetected = false;
 
 
+    console.log('number of chars in current line: ' + numberOfCharsInCurrentLine.innerText);
+    const numberOfCharsLeftInLine = numberOfCharsInCurrentLine.innerText - typeTextInputField.value.length;
+
+    numberOfCharsLeft.innerText = numberOfCharsLeftInLine.toString();
+
+    //когда допечатали строку
+    if (numberOfCharsLeftInLine === 0) {
+
+        document.getElementById('line' + numberOfLine).style.display = 'none';
+
+        if(numberOfCharsInCurrentLine.getAttribute('name') === 'lastLine') {
+            textTyped();
+            numberOfMistakes = 0;
+        }
+
+        typeTextInputField.value = '';
+        // textToCompareFromDiv.innerText = textToCompareFromDiv.innerText.substring(Number(numberOfCharsInCurrentLine.innerText));
+
+        numberOfAlreadyTypedChars = numberOfAlreadyTypedChars + Number(numberOfCharsInCurrentLine.innerText);
+
+        // nextLine.style='display: none';
+        numberOfLine++;
+
+
+
+        numberOfCharsInCurrentLine = document.getElementById('numberOfCharsInLine' + numberOfLine);
+
+        if(numberOfCharsInCurrentLine.getAttribute('name') === 'lastLine') {
+            // numberOfCharsInCurrentLine.innerText = (Number(numberOfCharsInCurrentLine.innerText) + 1).toString();
+        }
+    }
+
+    console.log("number of typed chars:" + numberOfAlreadyTypedChars);
+
     // сетим дебаг див
     // document.getElementById('debug_typedTextOutputDisplayNone').innerText = typeTextInputFieldValue;
 
     //каждый текст апдейт красим все чары в синий цвет
-    for (let i = 0; i < textToCompare.length; ++i) {
-        document.getElementById(('char' + i)).style.color = 'blue'
+    for (let i = numberOfAlreadyTypedChars; i < textToCompare.length; ++i) {
+        document.getElementById(('char' + i)).style.color = 'blue';
     }
 
 
     //пробегаемся по всем напечатанным буква
-    for (let i = 0; i < typeTextInputFieldValueLength; ++i) {
-        console.log("typeTextInputFieldValueLength: " + typeTextInputFieldValue);
+    for (let i = numberOfAlreadyTypedChars; i < numberOfAlreadyTypedChars + typeTextInputFieldValueLength; ++i) {
+        // console.log("typeTextInputFieldValueLength: " + typeTextInputFieldValue);
+        console.log('I: ' + i);
         // если буква выбрана правильно
-        if (textToCompare.charAt(i) === typeTextInputFieldValue.charAt(i)) {
+        if (textToCompare.charAt(i) === typeTextInputFieldValue.charAt(i - numberOfAlreadyTypedChars)) {
             //проверяем не покрашен ли уже чар в красный
             if (document.getElementById(('char' + i )).style.color !== 'red') {
                 bTypeTextCorrect = true;
@@ -72,4 +115,12 @@ export function typeTextInputFieldUpdated() {
     else {
         //document.getElementById(('debug_bool')).textContent = 'false'
     }
+
+    //когда допечатали строку
+    if (numberOfCharsLeftInLine === 0) {
+        for (let i = numberOfAlreadyTypedChars; i < textToCompare.length; ++i) {
+            document.getElementById(('char' + i)).style.color = 'blue';
+        }
+    }
+
 }
