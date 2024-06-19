@@ -20,7 +20,7 @@ $gray: #9b9b9b;
 
 .form__field {
     font-family: inherit;
-    width: 800px;
+    width: 300px;
     border: 0;
     border-bottom: 2px solid $gray;
     outline: 0;
@@ -29,6 +29,7 @@ $gray: #9b9b9b;
     padding: 7px 0;
     background: transparent;
     transition: border-color 0.2s;
+    margin-left: -124px;
 
     &::placeholder {
         color: transparent;
@@ -57,12 +58,12 @@ $gray: #9b9b9b;
         display: block;
         transition: 0.2s;
         color: $primary;
-        font-weight:700;
+        //font-weight:700;
     }
-    padding-bottom: 6px;
-    font-weight: 700;
-    border-width: 3px;
-    width: 800px;
+    //padding-bottom: 6px;
+    //font-weight: 700;
+    //border-width: 3px;
+    width: 700px;
     border-image: linear-gradient(to right, $primary,$secondary);
     border-image-slice: 1;
 }

@@ -72,7 +72,6 @@
                     legend: [1, 3, 5, 7, 9, 10],
                     itemSelector: "#cal-heatmap"
                 });
-                alert('hello world');
             });
 
         </script>

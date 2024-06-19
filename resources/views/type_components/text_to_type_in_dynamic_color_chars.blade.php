@@ -32,7 +32,9 @@ if(isset($lenOfCompareText)) {
 
                 else {
                     echo "</span>";
-                    echo "<div id='space' style='float: left; background-color: #ffffff; opacity: .0;'>/</div> ";
+                    echo "<div id='space' style='float: left; background-color: #ffffff; opacity: .0;'>&nbsp;</div>";
+//                    echo "<span>\u00A0</span>";
+
                     echo "<span class='word'>";
 
                 }
