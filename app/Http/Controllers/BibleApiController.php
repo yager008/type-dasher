@@ -41,7 +41,7 @@ class BibleApiController extends Controller
         $bibleApiResponse = $stringResponse;
         Session::put('bibleApiResponse', $bibleApiResponse);
 
-        return redirect()->route('TypeTestController.type');
+        return redirect()->route('TypeTestController.savedTexts');
 
 //        echo "<div id='bibleResponse' style='display: none'>{$stringResponse}</div>";
 //        //+ js before /body that sets inputTextBox ??

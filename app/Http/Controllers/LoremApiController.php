@@ -35,6 +35,6 @@ class LoremApiController extends Controller
         $loremApiResponse = $stringResponse;
         Session::put('loremApiResponse', $loremApiResponse);
 
-        return redirect()->route('TypeTestController.type');
+        return redirect()->route('TypeTestController.savedTexts');
     }
 }
