@@ -8,9 +8,10 @@ First time setup:
 
 3. app/composer install
 4. app/php artisan key:generate
-5. app/sudo chmod 777 -R ./
-6. php artisan migrate
-7. Start vite: npm run dev -- --host 0.0.0.0
+5. app/chmod 777 -R ./
+6. app/php artisan migrate
+7. app/npm install
+8. Start vite: npm run dev -- --host 0.0.0.0
 
 Next time setup:
 1. docker compose up --build
