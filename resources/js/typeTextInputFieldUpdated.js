@@ -10,6 +10,9 @@ const textToCompareFromDiv = document.getElementById('textToCompare');
 let numberOfLine = 1;
 let numberOfCharsInCurrentLine = document.getElementById('numberOfCharsInLine' + numberOfLine);
 
+let aTimePerLines= [];
+let aSpeedPerLines = [];
+
 export function typeTextInputFieldUpdated() {
     console.log("bTypeTextCorrect: " + bTypeTextCorrect);
     console.log("numberOfMistakes: " + numberOfMistakes);
@@ -31,7 +34,23 @@ export function typeTextInputFieldUpdated() {
     numberOfCharsLeft.innerText = numberOfCharsLeftInLine.toString();
 
     //когда допечатали строку
+    //fires when line is fully typed
     if (numberOfCharsLeftInLine === 0) {
+        const time = Number(document.getElementById('timer').value);
+
+        const sumInATimePerLines = aTimePerLines.reduce((partialSum, a) => partialSum + a, 0);
+
+        const timePerThisLine = time - sumInATimePerLines;
+
+        const speedPerThisLine = (Number(numberOfCharsInCurrentLine.innerText)/timePerThisLine*60).toFixed(2);
+
+        aTimePerLines.push(timePerThisLine);
+
+        document.getElementById('currentLineSpeed').innerText = speedPerThisLine.toString();
+
+        aSpeedPerLines.push(speedPerThisLine);
+
+        // alert(Number(numberOfCharsInCurrentLine.innerText) + " / " + time + " * 60 = " + Number(numberOfCharsInCurrentLine.innerText)/time*60);
 
         document.getElementById('line' + numberOfLine).style.display = 'none';
 
@@ -45,10 +64,7 @@ export function typeTextInputFieldUpdated() {
 
         numberOfAlreadyTypedChars = numberOfAlreadyTypedChars + Number(numberOfCharsInCurrentLine.innerText);
 
-        // nextLine.style='display: none';
         numberOfLine++;
-
-
 
         numberOfCharsInCurrentLine = document.getElementById('numberOfCharsInLine' + numberOfLine);
 
@@ -99,6 +115,7 @@ export function typeTextInputFieldUpdated() {
         numberOfMistakesMakeTextInput.value = numberOfMistakes;
         mistakeAlreadyDetected = true;
         console.log("Mistake detected, numberOfMistakes: " + numberOfMistakes);
+        document.getElementById('numberOfMistakesSpan').innerText = numberOfMistakes;
     }
 
     // Reset mistake detection state if no mistakes are currently detected

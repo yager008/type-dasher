@@ -61,13 +61,13 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
     }
 </script>
 
-<div class="container-fluid d-flex flex-column align-items-center justify-content-center vh-100">
+<div class="container-fluid d-flex flex-column align-items-center vh-100">
     <p>{{$updateInfo}}</p>
-    <div>
+    <div style="display: ">
         <form method="POST" action="{{route('TypeTestController.store')}}">
             @csrf
             <input type="text" id="outputSpeed" name="outputSpeed" placeholder="outputSpeed"
-                   value="{{ strlen($textToCompare)}}" readonly style="display: none">
+                   value="{{ strlen($textToCompare)}}" readonly style="display: n">
             <lable for="timer"></lable>
             <input type="text" id="timer" name="timer" readonly style="">
             <input type="text" id="numberOfMistakes" name="numberOfMistakes" readonly style="">
@@ -78,25 +78,7 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
         </form>
     </div>
 
-    <div>
-        <form method="POST" action="{{ route('BibleApiController.index') }}">
-            @csrf
-            <label>
-                <button name="BibleButton" id="BibleButton" class="btn btn-primary">
-                    RandomBibleVerse
-                </button>
-            </label>
-        </form>
-
-        <form method="POST" action="{{ route('LoremApiController.index') }}">
-            @csrf
-            <label>
-                <button name="LoremButton" id="LoremButton" class="btn btn-primary">
-                    LoremButton
-                </button>
-            </label>
-        </form>
-
+    <div id="submit new text div">
         <form autocomplete="off" method="POST" action="{{ route('TypeTestController.storeSavedTextIfCheckBoxIsOn') }}">
             @csrf
 
@@ -124,7 +106,7 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
             </label>
 
             <label>
-                <input type="text" name="savedTextID" id="savedTextID" style="display: none"
+                <input type="text" name="savedTextID" id="savedTextID" style="display: n"
                     value="{{(isset($savedTextID))?$savedTextID:''}}">
             </label>
 
@@ -133,6 +115,7 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
             </label>
         </form>
     </div>
+
     <div>
 
 {{--        <div class="form__group field">--}}
@@ -167,14 +150,20 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
-
 <form id="exitSavedTextModeForm" action="{{ route('TypeTestController.exitSavedTextMode') }}" method="POST" style="display: none;">
+    @csrf
+</form>
+
+<form id="reloadPage" action="{{ route('TypeTestController.type') }}" method="GET" style="display: none;">
     @csrf
 </form>
 
     <div id="numberOfCharsLeft" style="color:#11998e">92</div>
 
     <div id="numberOfLine" style="color:#11998e">1</div>
+
+    <span id="currentLineSpeed" style="color:#11998e">...</span>
+    <span id="numberOfMistakesSpan" style="color:#11998e">...</span>
 
 <script>
     //выходо из сейвд текст мода
@@ -239,22 +228,46 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
     // let numberOfLine = 1;
     // let numberOfCharsInCurrentLine = document.getElementById('numberOfCharsInLine' + numberOfLine);
 
+    function Timer(fn, t) {
+        let timerObj = setInterval(fn, t);
+
+        this.stop = function() {
+            if (timerObj) {
+                clearInterval(timerObj);
+                timerObj = null;
+            }
+            return this;
+        }
+
+        // start timer using current settings (if it's not already running)
+        this.start = function() {
+            if (!timerObj) {
+                this.stop();
+                timerObj = setInterval(fn, t);
+            }
+            return this;
+        }
+
+        // start with new or original interval, stop current interval
+        this.reset = function(newT = t) {
+            t = newT;
+            return this.stop().start();
+        }
+    }
+
+    let timer1 = new Timer(function() {
+        document.getElementById('reloadPage').submit();
+    }, 1000);
+    timer1.stop();
+
     typeTextInputField.addEventListener('input', function () {
-        // const numberOfCharsLeftInLine = numberOfCharsInCurrentLine.innerText - typeTextInputField.value.length;
-        // numberOfCharsLeft.innerText = numberOfCharsLeftInLine.toString();
-        //
-        // const nextLine = document.querySelector('span.line');
-        //
-        // if (numberOfCharsLeftInLine === 0) {
-        //
-        //     typeTextInputField.value = '';
-        //
-        //     textToCompareFromDiv.innerText = textToCompareFromDiv.innerText.substring(Number(numberOfCharsInCurrentLine.innerText));
-        //     // nextLine.style='display: none';
-        //     numberOfLine++;
-        //     numberOfCharsInCurrentLine = document.getElementById('numberOfCharsInLine' + numberOfLine);
-        // }
+        //TODO reset time as option in menu
+        timer1.reset(5000);
     })
+
+    function restartTimer() {
+        document.getElementById('reloadPage').submit();
+    }
 </script>
 
 </x-app-layout>
