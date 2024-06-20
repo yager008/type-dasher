@@ -1,11 +1,11 @@
 <script>
     function StartTimer () {
         let timerCounter = 0;
-        window.setInterval(myTimer, 1000);
+        window.setInterval(myTimer, 100);
         document.getElementById('timer').value = 0;
 
         function myTimer() {
-            timerCounter++;
+            timerCounter = timerCounter + 0.1;
             let fullTextLength = document.getElementById('lenOfFullText').innerText;
             document.getElementById('timer').value = timerCounter.toString();
             document.getElementById('outputSpeed').value = fullTextLength / timerCounter.toString() * 60;
@@ -28,17 +28,6 @@ if (!empty($textToCompare)) {
     echo "text to compare is empty <br>";
 }
 echo "</div>";
-
-if (isset($bShouldStartTimer) && $bShouldStartTimer) {
-?>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('typeTextInputField').focus();
-        StartTimer();
-    });
-</script>
-<?php
-}
 ?>
 
 <x-app-layout>
@@ -52,7 +41,7 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
     </div>
 
 </dialog>
-    <div style="color:#11998e" id="speedForLine">speedForLine</div>
+{{--    <div style="color:#11998e" id="speedForLine">speedForLine</div>--}}
 
 <script>
     if({{$bShowDialogBoxWithResult}}) {
@@ -62,8 +51,15 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
 </script>
 
 <div class="container-fluid d-flex flex-column align-items-center vh-100">
+
+    <div id="outputInfo" style="font-size: 30px; color:#11998e">
+        <span id="currentLineSpeed" style="color:#11998e">0</span>
+        <span>/</span>
+        <span id="numberOfMistakesSpan" style="color:#11998e">0</span>
+    </div>
+
     <p>{{$updateInfo}}</p>
-    <div style="display: ">
+    <div style="display: none">
         <form method="POST" action="{{route('TypeTestController.store')}}">
             @csrf
             <input type="text" id="outputSpeed" name="outputSpeed" placeholder="outputSpeed"
@@ -78,10 +74,10 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
         </form>
     </div>
 
-    <div id="submit new text div">
-        <form autocomplete="off" method="POST" action="{{ route('TypeTestController.storeSavedTextIfCheckBoxIsOn') }}">
-            @csrf
+    <div id="savedTextNameDiv" style="color:#11998e">{{ (isset($savedTextName))?$savedTextName:'' }}</div>
 
+    <!-- in this hidden div only text id is in use -->
+    <div id="submit new text div" style="display: none">
             <div id='textNameDiv' class="container mx-auto p-4" style="visibility: hidden">
                     <label for="savedTextName" class="block text-gray-700 text-sm font-bold mb-2">Enter text (max 15 characters):</label>
                     <input type="text" id="savedTextName" name="savedTextName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -129,7 +125,7 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
 {{--        </div>--}}
         <label for="typeTextInputField"></label>
         <input class="form__field" autocomplete="off" type="input" id="typeTextInputField"
-        oninput="window.typeTextInputFieldUpdated()" style="width: 650px; ">
+        oninput="window.typeTextInputFieldUpdated()" style="width: 770px; ">
 
 {{--        <label for="typeTextInputField"></label>--}}
 {{--        <input autocomplete="off" type="text" id="typeTextInputField" class="form-control p-3 "--}}
@@ -158,12 +154,12 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
     @csrf
 </form>
 
-    <div id="numberOfCharsLeft" style="color:#11998e">92</div>
+    <!-- important for typing to work -->
+    <div id="numberOfCharsLeft" style="color:#11998e display: none">92</div>
 
-    <div id="numberOfLine" style="color:#11998e">1</div>
+    <!-- debug div -->
+{{--    <div id="numberOfLine" style="color:#11998e">1</div>--}}
 
-    <span id="currentLineSpeed" style="color:#11998e">...</span>
-    <span id="numberOfMistakesSpan" style="color:#11998e">...</span>
 
 <script>
     //выходо из сейвд текст мода
@@ -222,11 +218,6 @@ if (isset($bShouldStartTimer) && $bShouldStartTimer) {
     function closeAlert() {
         alertDiv.classList.add('hidden');
     }
-
-    // const numberOfCharsLeft = document.getElementById('numberOfCharsLeft');
-    // const textToCompareFromDiv = document.getElementById('textToCompare');
-    // let numberOfLine = 1;
-    // let numberOfCharsInCurrentLine = document.getElementById('numberOfCharsInLine' + numberOfLine);
 
     function Timer(fn, t) {
         let timerObj = setInterval(fn, t);

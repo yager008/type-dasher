@@ -15,7 +15,7 @@ if(isset($lenOfCompareText)) {
         if(isset($textToCompare)) {
             if ($textToCompare[$i] == " ") {
 
-                if($numberOfChartsWithoutLineBreak > 92) {
+                if($numberOfChartsWithoutLineBreak > 110) {
                     $b0nlyOneLine = false;
 
                     echo "</span>";

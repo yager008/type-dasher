@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/StoreSavedText', [TypeTestController::class, 'storeSavedTextIfCheckboxIsOn' ])->name('TypeTestController.storeSavedTextIfCheckBoxIsOn');
     Route::post('/StoreSavedText', [TypeTestController::class, 'storeSavedTextIfCheckboxIsOn' ])->name('TypeTestControllerPost.storeSavedTextIfCheckBoxIsOn');
     Route::post('/DeleteSavedText', [TypeTestController::class, 'deleteSavedText' ])->name('TypeTestControllerPost.deleteSavedText');
+    Route::post('/createText', [TypeTestController::class, 'createText' ])->name('TypeTestControllerPost.createText');
 
     Route::get('/BibleApiRequest', [BibleApiController::class, 'index' ])->name('BibleApiController.index');
     Route::post('/BibleApiRequest', [BibleApiController::class, 'index' ])->name('BibleApiControllerPost.index');

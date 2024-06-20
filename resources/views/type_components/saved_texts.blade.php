@@ -4,11 +4,12 @@
         <li class="grid-item">
             <form method="POST" action="{{route('TypeTestController.openSavedText')}}">
                 @csrf
-                <button name="saved_text_open_btn_{{ $result['id'] }}" id="saved_text_btn_{{ $result['id'] }}" value="{{ $result['text'] }}">{{ $result['text_name'] }}</button>
+                <button class="btn btn-danger" name="saved_text_open_btn_{{ $result['id'] }}" id="saved_text_btn_{{ $result['id'] }}" value="{{ $result['text'] }}">type</button>
                 <p>best speed: {{ $result['best_speed'] }}</p>
                 <input type="text" value="{{$result['best_speed']}}" name="bestSpeed" id="bestSpeed" >
                 <input type="text" value="{{$result['id']}}" name="savedTextID" id="savedTextID">
                 <input type="text" value="{{$result['text']}}" name="savedText" id="savedText">
+                <input type="text" value="{{$result['text_name']}}" name="savedTextName" id="savedText">
 
 {{--                    <?php--}}
 {{--                if (isset($_POST["saved_text_open_btn_" . $result['id']]))--}}
@@ -39,6 +40,61 @@
             </div>
         </li>
     @endforeach
+    <li class="grid-item">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <form method="POST" action="{{ route('BibleApiController.index') }}">
+                        @csrf
+                        <button name="BibleButton" id="BibleButton" class="btn btn-primary">
+                            RandomBibleVerse
+                        </button>
+                    </form>
+                </div>
+                <div class="col">
+                    <form method="POST" action="{{ route('LoremApiController.index') }}">
+                        @csrf
+                        <button name="LoremButton" id="LoremButton" class="btn btn-primary">
+                            LoremButton
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="submit new text div">
+            <form autocomplete="off" method="POST" action="{{ route('TypeTestControllerPost.createText') }}">
+                @csrf
+                <div id='textNameDiv' class="container">
+                    <div id="alert" class="mt-2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert" style="visibility: hidden">
+
+                        <strong class="font-bold">Error!</strong>
+                        <span class="block sm:inline">You cannot enter more than 15 characters.</span>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="closeAlert()">
+                <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 5.652a1 1 0 011.414 1.414l-4.657 4.657 4.657 4.657a1 1 0 01-1.414 1.414l-4.657-4.657-4.657 4.657a1 1 0 01-1.414-1.414l4.657-4.657-4.657-4.657a1 1 0 011.414-1.414l4.657 4.657 4.657-4.657z"/></svg>
+                    </span>
+                    </div>
+                    <br>
+                    <label for="savedTextName" class="block text-gray-700 text-sm font-bold mb-2">Enter text (max 15 characters):</label>
+                    <input type="text" id="savedTextName" name="savedTextName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+
+                </div>
+
+                <label>
+                    <input type="text" name="inputTextBox" id="inputTextBox"
+                           value="{{(isset($textToSetInInputTextBox))?$textToSetInInputTextBox:''}}">
+                </label>
+
+                {{--            <label>--}}
+                {{--                <input type="text" name="savedTextID" id="savedTextID" style="display: n"--}}
+                {{--                       value="{{(isset($savedTextID))?$savedTextID:''}}">--}}
+                {{--            </label>--}}
+
+                <label>
+                    <input type="submit" name="submitInputTextBoxButton" id="submitInputTextBoxButton" class="btn btn-primary">
+                </label>
+            </form>
+        </div>
+    </li>
 </ul>
 
 <style>
