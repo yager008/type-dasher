@@ -11,7 +11,9 @@ First time setup:
 5. app/chmod 777 -R ./
 6. app/php artisan migrate
 7. app/npm install
-8. Start vite: npm run dev -- --host 0.0.0.0
+8. app/npm run build
+
+9. Start vite: npm run dev -- --host 0.0.0.0
 
 Next time setup:
 1. docker compose up --build

@@ -22,4 +22,20 @@ export default defineConfig({
             port: 5173,
         },
     },
+    build: {
+        outDir: 'public/build',
+        rollupOptions: {
+            input: {
+                app: 'resources/js/app.js',
+                app_css: 'resources/css/app.css',
+                app_scss: 'resources/sass/app.scss',
+            },
+        },
+        manifest: true,
+    },
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'resources/js'),
+        },
+    },
 });
