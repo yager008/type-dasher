@@ -30,11 +30,11 @@ jobs:
             sed -i 's/#\?\s*DB_DATABASE=.*/DB_DATABASE=lardocker/' .env
             sed -i 's/#\?\s*DB_USERNAME=.*/DB_USERNAME=root/' .env
             sed -i 's/#\?\s*APP_ENV=.*/APP_ENV=production/' .env
-            docker-compose up --build -d
-            docker-compose exec app composer install
-            docker-compose exec app php artisan key:generate
-            docker-compose exec app chmod 777 -R ./
-            docker-compose exec app php artisan migrate --force
-            docker-compose exec app npm install
-            docker-compose exec app npm run build
-            docker-compose exec app cp /var/www/public/.vite/manifest.json /var/www/public/manifest.json
+#            docker-compose up --build -d
+#            docker-compose exec app composer install
+#            docker-compose exec app php artisan key:generate
+#            docker-compose exec app chmod 777 -R ./
+#            docker-compose exec app php artisan migrate --force
+#            docker-compose exec app npm install
+#            docker-compose exec app npm run build
+#            docker-compose exec app cp /var/www/public/.vite/manifest.json /var/www/public/manifest.json
