@@ -11,6 +11,7 @@ First time setup:
 6. app/php artisan migrate
 7. app/npm install
 8. app/npm run build
+9. cp /var/www/public/.vite/manifest.json /var/www/public/manifest.json
 
 if locally:
 9. Start vite: npm run dev -- --host 0.0.0.0
