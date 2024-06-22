@@ -28,7 +28,7 @@ jobs:
             sed -i 's/DB_HOST=.*/DB_HOST=db/' .env
             sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=root/' .env
             sed -i 's/APP_ENV=.*/APP_ENV=production/' .env
-            sed -i 's/APP_ENV=.*/APP_DATABASE=lardocker/' .env
+            sed -i 's/APP_DATABASE=.*/APP_DATABASE=lardocker/' .env
             docker-compose up --build -d
             docker-compose exec app composer install
             docker-compose exec app php artisan key:generate
