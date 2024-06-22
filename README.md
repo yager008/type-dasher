@@ -5,7 +5,6 @@ First time setup:
    DB_PORT = 3306 <br>
    DB_HOST = db <br>
    DB_PASSWORD <br>
-
 3. app/composer install
 4. app/php artisan key:generate
 5. app/chmod 777 -R ./
@@ -13,6 +12,7 @@ First time setup:
 7. app/npm install
 8. app/npm run build
 
+if locally:
 9. Start vite: npm run dev -- --host 0.0.0.0
 
 Next time setup:
