@@ -22,7 +22,6 @@ jobs:
           script: |
             cd /var/www/first_real_laravel_docker_projcet/
             git pull origin type-dasher-prod
-            docker-compose up --build -d
             docker-compose exec app composer install
             docker-compose exec app chmod 777 -R ./
             docker-compose exec app php artisan migrate --force
