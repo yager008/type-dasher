@@ -30,4 +30,4 @@ jobs:
             sed -i 's/#\?\s*DB_DATABASE=.*/DB_DATABASE=lardocker/' .env
             sed -i 's/#\?\s*DB_USERNAME=.*/DB_USERNAME=root/' .env
             sed -i 's/#\?\s*APP_ENV=.*/APP_ENV=production/' .env
-            docker-compose -f /var/www/laravel_project/docker-compose.yml --build
+            docker-compose -f /var/www/first_real_laravel_docker_projcet/docker-compose.yml --build
