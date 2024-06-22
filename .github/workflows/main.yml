@@ -32,7 +32,7 @@ jobs:
             sed -i 's/#\?\s*APP_ENV=.*/APP_ENV=production/' .env
 #            docker-compose up --build -d
 #            docker-compose exec app composer install
-#            docker-compose exec app php artisan key:generate
+            docker-compose exec app php artisan key:generate
 #            docker-compose exec app chmod 777 -R ./
 #            docker-compose exec app php artisan migrate --force
 #            docker-compose exec app npm install
