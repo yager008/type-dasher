@@ -31,3 +31,21 @@ php artisan db:seed --class=TypeResultsTableSeeder
    php artisan migrate
    npm install
    npm run dev
+
+  cd /var/www/first_real_laravel_docker_projcet/ git pull origin type-dasher-prod
+        cp .env.example .env
+        sed -i 's/#\?\s*DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+        sed -i 's/#\?\s*DB_PORT=.*/DB_PORT=3306/' .env
+        sed -i 's/#\?\s*DB_HOST=.*/DB_HOST=db/' .env
+        sed -i 's/#\?\s*DB_PASSWORD=.*/DB_PASSWORD=root/' .env
+        sed -i 's/#\?\s*DB_DATABASE=.*/DB_DATABASE=lardocker/' .env
+        sed -i 's/#\?\s*DB_USERNAME=.*/DB_USERNAME=root/' .env
+        sed -i 's/#\?\s*APP_ENV=.*/APP_ENV=production/' .env
+        docker-compose up --build -d
+        docker-compose exec app composer install
+        docker-compose exec app php artisan key:generate
+        docker-compose exec app chmod 777 -R ./
+        docker-compose exec app php artisan migrate --force
+        docker-compose exec app npm install
+        docker-compose exec app npm run build
+        docker-compose exec app cp /var/www/public/.vite/manifest.json /var/www/public/manifest.json

@@ -12,7 +12,6 @@
         }
     }
 </script>
-hello world
 
 <?php
 
@@ -59,7 +58,7 @@ echo "</div>";
         <span id="numberOfMistakesSpan" style="color:#11998e">0</span>
     </div>
 
-    <p>{{$updateInfo}}</p>
+{{--    <p>{{$updateInfo}}</p>--}}
     <div style="display: none">
         <form method="POST" action="{{route('TypeTestController.store')}}">
             @csrf
