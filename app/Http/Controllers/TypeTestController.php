@@ -124,7 +124,7 @@ class TypeTestController extends Controller
 
         $name = auth()->user();
 
-        return view('type', compact('resultsArray', 'saved_texts', 'textToSetInInputTextBox', 'textToCompare', 'bShouldStartTimer', 'name', 'idOfSavedText', 'bShowDialogBoxWithResult', 'dialogBoxContent', 'savedText', 'savedTextName', 'bestSpeed', 'savedTextID', 'updateInfo'));
+        return view('type', compact('resultsArray', 'saved_texts', 'textToSetInInputTextBox', 'textToCompare', 'bShouldStartTimer', 'name', 'idOfSavedText', 'bShowDialogBoxWithResult', 'dialogBoxContent', 'savedText', 'savedTextName', 'bestSpeed', 'savedTextID', 'updateInfo', 'previousBestSpeed', 'latest_type_result_speed'));
     }
 
     public function statistics()
@@ -193,7 +193,9 @@ class TypeTestController extends Controller
             $savedText = SavedText::find($data['savedTextId']);
 
             $currentBestSpeed = $savedText->best_speed;
+            $numberOfMistakes = $savedText->number_of_mistakes;
             Session::put('previousBestSpeed', $currentBestSpeed);
+            Session::put('numberOfMistakes', $numberOfMistakes);
 
             if ($data['outputSpeed'] > $currentBestSpeed) {
                 // If the new speed is better, update the record with the new best speed
