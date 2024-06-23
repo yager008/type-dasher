@@ -37,7 +37,7 @@ php artisan db:seed --class=TypeResultsTableSeeder
         sed -i 's/#\?\s*DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
         sed -i 's/#\?\s*DB_PORT=.*/DB_PORT=3306/' .env
         sed -i 's/#\?\s*DB_HOST=.*/DB_HOST=db/' .env
-        sed -i 's/#\?\s*DB_PASSWORD=.*/DB_PASSWORD=root/' .env
+        sed -i 's/#\?\s*DB_PASSWORD=.*/DB_PASSWORD=/' .env
         sed -i 's/#\?\s*DB_DATABASE=.*/DB_DATABASE=lardocker/' .env
         sed -i 's/#\?\s*DB_USERNAME=.*/DB_USERNAME=root/' .env
         sed -i 's/#\?\s*APP_ENV=.*/APP_ENV=production/' .env

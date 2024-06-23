@@ -53,9 +53,17 @@ echo "</div>";
 <div class="container-fluid d-flex flex-column align-items-center vh-100">
 
     <div id="outputInfo" style="font-size: 30px; color:#11998e">
-        <span id="currentLineSpeed" style="color:#11998e">0</span>
+        <span id="currentLineSpeed" style="color:#11998e">{{ (isset($latest_type_result_speed))?$latest_type_result_speed:'---' }}</span>
+        <span style="color:#11998e"> (</span>
+        <span id="previousTypeSpeed" style="color:#11998e">{{ (isset($previousBestSpeed))?$previousBestSpeed:'' }}</span>
+        <span style="color:#11998e">)</span>
+
         <span>/</span>
-        <span id="numberOfMistakesSpan" style="color:#11998e">0</span>
+
+        <span id="numberOfMistakesSpan" style="color:#11998e">---</span>
+        <span style="color:#11998e"> (</span>
+        <span id="previousNumberOfMistakesSpan" style="color:#11998e">200</span>
+        <span style="color:#11998e">)</span>
     </div>
 
 {{--    <p>{{$updateInfo}}</p>--}}
