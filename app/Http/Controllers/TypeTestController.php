@@ -188,8 +188,22 @@ class TypeTestController extends Controller
 
         $data['numberOfMistakes'] = $data['numberOfMistakes'] ?? '0';
 
+        $latest_type_result = TypeResult::create([
+            'result' => $data['outputSpeed'],
+            'username' => auth()->user()['name'],
+            'user_id' => auth()->user()['id'],
+            'number_of_mistakes' => $data['numberOfMistakes'],
+            'user_local_time' => 'time'
+        ]);
+
+        alert($latest_type_result);
+
+//        $latest_type_result_speed = TypeResult::latest('id')->first()->result;
+
+
         if ($data['savedTextId'] !== null) {
             Session::put('bSavedTextUpdate', 'true');
+
             $savedText = SavedText::find($data['savedTextId']);
 
             $currentBestSpeed = $savedText->best_speed;
@@ -203,13 +217,6 @@ class TypeTestController extends Controller
             }
         }
 
-        TypeResult::create([
-            'result' => $data['outputSpeed'],
-            'username' => auth()->user()['name'],
-            'user_id' => auth()->user()['id'],
-            'number_of_mistakes' => $data['numberOfMistakes'],
-            'user_local_time' => 'time'
-        ]);
 
         return redirect()->route("TypeTestControllerPost.type");
     }
