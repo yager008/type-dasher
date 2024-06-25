@@ -66,7 +66,7 @@ echo "</div>";
     </div>
 
 {{--    <p>{{$updateInfo}}</p>--}}
-    <div style="display: none">
+    <div style="display: none ">
         <form method="POST" action="{{route('TypeTestController.store')}}">
             @csrf
             <input type="text" id="outputSpeed" name="outputSpeed" placeholder="outputSpeed"
@@ -109,7 +109,7 @@ echo "</div>";
             </label>
 
             <label>
-                <input type="text" name="savedTextID" id="savedTextID" style="display: n"
+                <input type="text" name="savedTextID" id="savedTextID" style="display: none"
                     value="{{(isset($savedTextID))?$savedTextID:''}}">
             </label>
 
@@ -120,28 +120,12 @@ echo "</div>";
 
     <div>
 
-{{--        <div class="form__group field">--}}
-{{--            <input type="input" class="form__field" placeholder="Name" name="name" id='name' required />--}}
-{{--            <label for="name" class="form__label">Name</label>--}}
-
-{{--            <label for="typeTextInputField"></label>--}}
-{{--            <input class="form__field" autocomplete="off" type="text" id="typeTextInputField">--}}
-{{--                   oninput="window.typeTextInputFieldUpdated()" style="width: 800px; ">--}}
-
-{{--        </div>--}}
         <label for="typeTextInputField"></label>
         <input class="form__field" autocomplete="off" type="input" id="typeTextInputField"
         oninput="window.typeTextInputFieldUpdated()" style="width: 770px; ">
 
-{{--        <label for="typeTextInputField"></label>--}}
-{{--        <input autocomplete="off" type="text" id="typeTextInputField" class="form-control p-3 "--}}
-{{--               oninput="window.typeTextInputFieldUpdated()" style="width: 800px; ">--}}
     </div>
-{{--    <div>--}}
-{{--        <br><br>--}}
-{{--        <!-- debug typed text -->--}}
-{{--        <p id="debug_typedTextOutputDisplayNone" style="display: none"></p>--}}
-{{--    </div>--}}
+
     <div id="chars wrapper" style="width: 770px;">
         @include('type_components.text_to_type_in_dynamic_color_chars')
     </div>
@@ -161,7 +145,7 @@ echo "</div>";
 </form>
 
     <!-- important for typing to work -->
-    <div id="numberOfCharsLeft" style="color:#11998e display: none">92</div>
+    <div id="numberOfCharsLeft" style="color:#11998e; display: none">92</div>
 
     <!-- debug div -->
 {{--    <div id="numberOfLine" style="color:#11998e">1</div>--}}

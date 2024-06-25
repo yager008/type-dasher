@@ -49,16 +49,35 @@
                     <p class='' style="color: #FFFFFF"> | {{ $result['text_name'] }} | {{ $result['best_speed'] }}/{{ $result['number_of_mistakes_for_best_type_result'] }} | </p>
                 </span>
                 <textarea id='updatedTextTextArea_{{$result['id']}}' class="h-75 w-100 mt-1">{{ $result['text'] }}</textarea>
+
                 <script>
-                    //send value to patch form
-                    updatedTextTextArea_{{$result['id']}} = document.getElementById('updatedTextTextArea_{{$result['id']}}');
-                    inputTextUpdatedText_{{$result['id']}} = document.getElementById('updatedText_{{$result['id']}}');
-                    inputTextUpdatedText_{{$result['id']}}.value = updatedTextTextArea_{{$result['id']}}.value;
+                    // Get the elements
+                    const updatedTextTextArea_{{$result['id']}} = document.getElementById("updatedTextTextArea_{{$result['id']}}");
+                    const inputTextUpdatedText_{{$result['id']}} = document.getElementById('updatedText_{{$result['id']}}');
 
+                    {{--alert(inputTextUpdatedText_{{$result['id']}}.value.replace(/~/g, '\n'));--}}
+
+                    updatedTextTextArea_{{$result['id']}}.value = updatedTextTextArea_{{$result['id']}}.value.replace(/~/g, '\n');
+
+                    // Function to add '~' at the end of each line
+                    function processLines(text) {
+                        return text.split('\n').map(line => {
+                            // Remove all trailing tildes
+                            line = line.replace(/~+$/, '');
+                            // Add a single tilde if the line is not empty
+                            return line.length > 0 ? line + '~' : line;
+                        }).join('\n').slice(0, -1);
+                    }
+
+
+                    // Set initial value with tildes added
+                    inputTextUpdatedText_{{$result['id']}}.value = processLines(updatedTextTextArea_{{$result['id']}}.value);
+
+                    // Add event listener to update value with tildes added
                     updatedTextTextArea_{{$result['id']}}.addEventListener('input', function () {
-                        inputTextUpdatedText_{{$result['id']}}.value = updatedTextTextArea_{{$result['id']}}.value;
-                    })
+                        inputTextUpdatedText_{{$result['id']}}.value = processLines(updatedTextTextArea_{{$result['id']}}.value);
 
+                    });
                 </script>
             </li>
         @endif

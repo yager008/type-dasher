@@ -72,6 +72,13 @@ export function typeTextInputFieldUpdated() {
                 document.getElementById(('char' + i)).style.color = 'green'
             }
         }
+        else if (textToCompare.charAt(i) === "~" && typeTextInputFieldValue.charAt(i - numberOfAlreadyTypedChars) === " ") {
+            //проверяем не покрашен ли уже чар в красный
+            if (document.getElementById(('char' + i )).style.color !== 'red') {
+                bTypeTextCorrect = true;
+                document.getElementById(('char' + i)).style.color = 'green'
+            }
+        }
 
         else {
 

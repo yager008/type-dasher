@@ -408,6 +408,8 @@ class TypeTestController extends Controller
             'savedTextName' => 'string'
         ]);
 
+        dd($data['inputTextBox']);
+
 //        Session::put('idOfSavedText', $data['savedTextID']);
 
 //        if ($data['savedTextID'] !== null) {
