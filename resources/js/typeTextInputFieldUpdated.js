@@ -129,7 +129,7 @@ export function typeTextInputFieldUpdated() {
 
         aTimePerLines.push(timePerThisLine);
 
-        document.getElementById('currentLineSpeed').innerText = speedPerThisLine.toString();
+        document.getElementById('currentLineSpeed').innerText = parseInt(speedPerThisLine).toString();
 
         aSpeedPerLines.push(speedPerThisLine);
 

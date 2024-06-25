@@ -16,18 +16,16 @@
 <?php
 
     //сетим див с текстом из апи
-
 if (!empty($textToCompare)) {
     echo "<div style='display: none';>";
-//    текст с которым сравнивается инпут при каждом напечатанном символе
+    //текст с которым сравнивается инпут при каждом напечатанном символе
     echo "textToCompare: <div id='textToCompare'>{$textToCompare}</div><br>";
 
     $lenOfCompareText = strlen($textToCompare);
     echo "<div style='float: left';> Length of compare text:</div> <div id='lenOfFullText';> {$lenOfCompareText}</div> <br>";
-} else {
-//    echo "text to compare is empty <br>";
 }
 echo "</div>";
+
 ?>
 
 <x-app-layout>
@@ -54,14 +52,14 @@ echo "</div>";
 
     <div id="outputInfo" style="font-size: 30px; color:#11998e">
 {{--        <span>best result:</span>--}}
-        <span id="bestTypeSpeed" style="color:#11998e">{{ (isset($bestSpeedForTypeResult))?$bestSpeedForTypeResult:'---' }}</span>
+        <span id="bestTypeSpeed" style="color:#11998e">{{ (isset($bestSpeedForTypeResult))?intval($bestSpeedForTypeResult):'---' }}</span>
         <span>/</span>
         <span id="bestSpeedNumberOfMistakesSpan" style="color:#11998e">{{ (isset($numberOfMistakesForBestTypeResult))?$numberOfMistakesForBestTypeResult:'---' }}</span>
     </div>
 
     <div id="outputInfo" style="font-size: 30px; color:#11998e">
         {{--        <span>current result:</span>--}}
-        <span id="currentLineSpeed" style="color:#11998e">{{ (isset($latest_type_result_speed))?$latest_type_result_speed:'---' }}</span>
+        <span id="currentLineSpeed" style="color:#11998e">{{ (isset($latest_type_result_speed))?intval($latest_type_result_speed):'---' }}</span>
         <span>/</span>
         <span id="numberOfMistakesSpan" style="color:#11998e">{{ (isset($latest_type_result_number_of_mistakes))?$latest_type_result_number_of_mistakes:'---' }}</span>
     </div>
