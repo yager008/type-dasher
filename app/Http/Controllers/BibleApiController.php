@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\SavedText;
 use App\Models\typeresult;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 
@@ -17,7 +18,7 @@ class BibleApiController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function index()
+    public function index(Request $request)
     {
 
         $response = Http::get('https://bible-api.com/?random=verse');
@@ -41,7 +42,25 @@ class BibleApiController extends Controller
         $bibleApiResponse = $stringResponse;
         Session::put('bibleApiResponse', $bibleApiResponse);
 
-        return redirect()->route('TypeTestController.savedTexts');
+
+        // Get the HTTP referrer
+        $referrer = $request->header('referer');
+
+        // Initialize an array to hold query parameters
+        $queryParams = [];
+
+        if ($referrer) {
+            // Parse the URL to get components
+            $urlComponents = parse_url($referrer);
+
+            // Check if there is a query string in the referrer URL
+            if (isset($urlComponents['query'])) {
+                // Parse the query string into an associative array
+                parse_str($urlComponents['query'], $queryParams);
+            }
+        }
+
+        return redirect()->route('TypeTestController.savedTexts', $queryParams);
 
 //        echo "<div id='bibleResponse' style='display: none'>{$stringResponse}</div>";
 //        //+ js before /body that sets inputTextBox ??

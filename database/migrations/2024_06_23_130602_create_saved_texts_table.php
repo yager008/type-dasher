@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('saved_texts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('best_type_result_id')->default(0);
+            $table->BigInteger('best_type_result_id')->default(-1);
             $table->timestamps();
             $table->longText('text');
             $table->string('text_name');
@@ -24,9 +24,6 @@ return new class extends Migration
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
-
-            $table->foreign('best_type_result_id')
-                ->references('id')->on('type_results');
         });
     }
 
