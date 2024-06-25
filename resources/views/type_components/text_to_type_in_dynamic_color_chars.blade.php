@@ -84,6 +84,6 @@ if(isset($lenOfCompareText)) {
     echo "</span>";
     echo "<br>";
     echo "</span>";
-    echo "<div id='numberOfCharsInLine{$numberOfCurrentLine}' name='lastLine'>{$numberOfChartsWithoutLineBreak}</div>";
+    echo "<div style='display:none' id='numberOfCharsInLine{$numberOfCurrentLine}' name='lastLine'>{$numberOfChartsWithoutLineBreak}</div>";
 }
 

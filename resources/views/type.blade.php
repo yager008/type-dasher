@@ -31,15 +31,15 @@ echo "</div>";
 ?>
 
 <x-app-layout>
-<dialog id="dialogBox" class="content-around">
-    <div class="flex justify-center items-center h-full flex-col">
-        <p>Your speed result:</p>
-        <p id="dialogMessage" class="inline"></p>
-        <p>symbols/second</p>
-        <br>
-        <button onclick="closeDialog()" class="bg-blue-900 ">Close</button>
-    </div>
-</dialog>
+{{--<dialog id="dialogBox" class="content-around">--}}
+{{--    <div class="flex justify-center items-center h-full flex-col">--}}
+{{--        <p>Your speed result:</p>--}}
+{{--        <p id="dialogMessage" class="inline"></p>--}}
+{{--        <p>symbols/second</p>--}}
+{{--        <br>--}}
+{{--        <button onclick="closeDialog()" class="bg-blue-900 ">Close</button>--}}
+{{--    </div>--}}
+{{--</dialog>--}}
 {{--    <div style="color:#11998e" id="speedForLine">speedForLine</div>--}}
 
 <script>
@@ -51,18 +51,19 @@ echo "</div>";
 
 <div class="container-fluid d-flex flex-column align-items-center ">
 
-    <div id="outputInfo" style="font-size: 30px; color:#11998e">
-        <span>current result:</span>
-        <span id="currentLineSpeed" style="color:#11998e">{{ (isset($latest_type_result_speed))?$latest_type_result_speed:'---' }}</span>
-        <span>/</span>
-        <span id="numberOfMistakesSpan" style="color:#11998e">{{ (isset($latest_type_result_number_of_mistakes))?$latest_type_result_number_of_mistakes:'---' }}</span>
-    </div>
 
     <div id="outputInfo" style="font-size: 30px; color:#11998e">
-        <span>best result:</span>
+{{--        <span>best result:</span>--}}
         <span id="bestTypeSpeed" style="color:#11998e">{{ (isset($bestSpeedForTypeResult))?$bestSpeedForTypeResult:'---' }}</span>
         <span>/</span>
         <span id="bestSpeedNumberOfMistakesSpan" style="color:#11998e">{{ (isset($numberOfMistakesForBestTypeResult))?$numberOfMistakesForBestTypeResult:'---' }}</span>
+    </div>
+
+    <div id="outputInfo" style="font-size: 30px; color:#11998e">
+        {{--        <span>current result:</span>--}}
+        <span id="currentLineSpeed" style="color:#11998e">{{ (isset($latest_type_result_speed))?$latest_type_result_speed:'---' }}</span>
+        <span>/</span>
+        <span id="numberOfMistakesSpan" style="color:#11998e">{{ (isset($latest_type_result_number_of_mistakes))?$latest_type_result_number_of_mistakes:'---' }}</span>
     </div>
 
 {{--    <p>{{$updateInfo}}</p>--}}
