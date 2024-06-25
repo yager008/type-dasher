@@ -1,49 +1,100 @@
 <ul class="grid-container">
-    {{--  выводим значени таблицы saved_texts --}}
-    @foreach ($saved_texts as $result)
-        <li class="grid-item">
-            <form method="POST" action="{{route('TypeTestController.openSavedText')}}">
-                @csrf
-                <button class="btn btn-danger" name="saved_text_open_btn_{{ $result['id'] }}" id="saved_text_btn_{{ $result['id'] }}" value="{{ $result['text'] }}">type</button>
-                <p>best speed: {{ $result['best_speed'] }}</p>
-                <input type="text" value="{{$result['best_speed']}}" name="bestSpeed" id="bestSpeed" >
-                <input type="text" value="{{$result['id']}}" name="savedTextID" id="savedTextID">
-                <input type="text" value="{{$result['text']}}" name="savedText" id="savedText">
-                <input type="text" value="{{$result['text_name']}}" name="savedTextName" id="savedText">
+    {{-- Loop through the saved_texts collection --}}
+    @foreach ($paginatedSavedTexts as $result)
+        {{-- Check if this item is the pseudo item for the create form --}}
+{{--        {{dd($result)}}--}}
+        @if (isset($result->is_create_form) && $result->is_create_form)
+            <li class="grid-item" style="display: none ;" id="create-new-text-item">
+            </li>
+        @else
+            <li class="grid-item" style="height: 225px">
+                <span class="flex justify-content-between">
+                    <div class="flex">
+                    <form method="POST" action="{{route('TypeTestController.openSavedText')}}">
+                        @csrf
+                        <button class="btn btn-danger" name="saved_text_open_btn_{{ $result['id'] }}" id="saved_text_btn_{{ $result['id'] }}" value="{{ $result['text'] }}">Type</button>
+                        <input style="display: none" type="text" value="{{$result['best_speed']}}" name="bestSpeed" id="bestSpeed">
+                        <input style="display: none" type="text" value="{{$result['id']}}" name="savedTextID" id="savedTextID">
+                        <input style="display: none" type="text" value="{{$result['text']}}" name="savedText" id="savedText">
+                        <input style="display: none" type="text" value="{{$result['text_name']}}" name="savedTextName" id="savedText">
+                    </form>
 
-{{--                    <?php--}}
-{{--                if (isset($_POST["saved_text_open_btn_" . $result['id']]))--}}
-{{--                {--}}
-{{--                    ?>--}}
-{{--                <script>--}}
-{{--                    console.log('console log: {{$result['id']}}');--}}
+{{--                    <button class="btn btn-danger show-text-button">Show--}}
+{{--                        <span style="color: #0a58ca " class="tooltip-text">{{ $result['text'] }}</span>--}}
+{{--                    </button>--}}
 
-{{--                    InButtonText = document.getElementById('saved_text_btn_{{ $result['id'] }}').value;--}}
-{{--                    document.getElementById('inputTextBox').value = InButtonText;--}}
-{{--                    document.getElementById('savedTextId').value = {{ $result['id'] }};--}}
-{{--                    document.getElementById('savedTextID').value = {{ $result['id'] }};--}}
-{{--                </script>--}}
-{{--                    <?php--}}
-{{--                }--}}
-{{--                    ?>--}}
-            </form>
+{{--                    <form method="POST" action="">--}}
+{{--                        @csrf--}}
+{{--                        <button class="btn btn-danger">Post--}}
+{{--                        </button>--}}
+{{--                    </form>--}}
 
-            <div class="button-container">
-                <button class="show-text-button">Show
-                    <span class="tooltip-text">{{ $result['text'] }}</span>
-                </button>
+                    <form class="ml-3" method="POST" action="{{ route('TypeTestController.updateSavedText') }}" >
+                        @csrf
+                        @method('PATCH')
+                        <button class="btn btn-danger">Update
+                        </button>
+                        <input style="display: none" type="text" value="{{$result['id']}}" name="savedTextID" id="savedTextID">
+                        <input style="display: none" type="text" value="{{$result['text']}}" name="savedText" id="savedText">
+                        <input style="display: none" type="text" value="" name="updatedText" id="updatedText_{{$result['id']}}">
+                    </form>
 
-                <form method="POST" action="{{ route('TypeTestControllerPost.deleteSavedText') }}">
-                    @csrf
-                    <button name="saved_text_delete_btn" id="saved_text_delete_btn_{{ $result['id'] }}" value="{{ $result['id'] }}">Delete</button>
-                </form>
-            </div>
-        </li>
+                    <form class="ml-3" method="POST" action="{{ route('TypeTestController.deleteSavedText') }}">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" name="saved_text_delete_btn" id="saved_text_delete_btn_{{ $result['id'] }}" value="{{ $result['id'] }}">Delete</button>
+                    </form>
+                    </div>
+
+                    <p class='' style="color: #FFFFFF"> | {{ $result['text_name'] }} | {{ $result['best_speed'] }}/{{ $result['number_of_mistakes_for_best_type_result'] }} | </p>
+                </span>
+                <textarea id='updatedTextTextArea_{{$result['id']}}' class="h-75 w-100 mt-1">{{ $result['text'] }}</textarea>
+
+                <script>
+                    // Get the elements
+                    const updatedTextTextArea_{{$result['id']}} = document.getElementById("updatedTextTextArea_{{$result['id']}}");
+                    const inputTextUpdatedText_{{$result['id']}} = document.getElementById('updatedText_{{$result['id']}}');
+
+                    {{--alert(inputTextUpdatedText_{{$result['id']}}.value.replace(/~/g, '\n'));--}}
+
+                    updatedTextTextArea_{{$result['id']}}.value = updatedTextTextArea_{{$result['id']}}.value.replace(/~/g, '\n');
+
+                    // Function to add '~' at the end of each line
+                    function processLines(text) {
+                        return text.split('\n').map(line => {
+                            // Remove all trailing tildes
+                            line = line.replace(/~+$/, '');
+                            // Add a single tilde if the line is not empty
+                            return line.length > 0 ? line + '~' : line;
+                        }).join('\n').slice(0, -1);
+                    }
+
+
+                    // Set initial value with tildes added
+                    inputTextUpdatedText_{{$result['id']}}.value = processLines(updatedTextTextArea_{{$result['id']}}.value);
+
+                    // Add event listener to update value with tildes added
+                    updatedTextTextArea_{{$result['id']}}.addEventListener('input', function () {
+                        inputTextUpdatedText_{{$result['id']}}.value = processLines(updatedTextTextArea_{{$result['id']}}.value);
+
+                    });
+                </script>
+            </li>
+        @endif
     @endforeach
-    <li class="grid-item">
-        <div class="container">
-            <div class="row">
-                <div class="col">
+    {{-- Check if the current page is the last page --}}
+
+    @if ($paginatedSavedTexts->currentPage() == $paginatedSavedTexts->lastPage())
+        <li class="grid-item" style="height: 225px">
+            <div class="flex justify-content-between">
+                <form autocomplete="off" method="POST" action="{{ route('TypeTestControllerPost.createText') }}">
+                    @csrf
+
+                    <input type="text" placeholder='new text name' id="savedTextName" name="savedTextName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <input type="text" name="inputTextBox" id="inputTextBox" style="display: none" value="{{ (isset($textToSetInInputTextBox)) ? $textToSetInInputTextBox : '' }}">
+                    <input type="submit" style="display: none" name="submitInputTextBoxButton" id="submitInputTextBoxButton" class="btn btn-primary">
+                </form>
+                <div class="bible button">
                     <form method="POST" action="{{ route('BibleApiController.index') }}">
                         @csrf
                         <button name="BibleButton" id="BibleButton" class="btn btn-primary">
@@ -51,7 +102,7 @@
                         </button>
                     </form>
                 </div>
-                <div class="col">
+                <div class="lorem button">
                     <form method="POST" action="{{ route('LoremApiController.index') }}">
                         @csrf
                         <button name="LoremButton" id="LoremButton" class="btn btn-primary">
@@ -60,42 +111,24 @@
                     </form>
                 </div>
             </div>
-        </div>
-        <div id="submit new text div">
-            <form autocomplete="off" method="POST" action="{{ route('TypeTestControllerPost.createText') }}">
-                @csrf
-                <div id='textNameDiv' class="container">
-                    <div id="alert" class="mt-2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert" style="visibility: hidden">
 
-                        <strong class="font-bold">Error!</strong>
-                        <span class="block sm:inline">You cannot enter more than 15 characters.</span>
-                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="closeAlert()">
-                <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 5.652a1 1 0 011.414 1.414l-4.657 4.657 4.657 4.657a1 1 0 01-1.414 1.414l-4.657-4.657-4.657 4.657a1 1 0 01-1.414-1.414l4.657-4.657-4.657-4.657a1 1 0 011.414-1.414l4.657 4.657 4.657-4.657z"/></svg>
-                    </span>
-                    </div>
-                    <br>
-                    <label for="savedTextName" class="block text-gray-700 text-sm font-bold mb-2">Enter text (max 15 characters):</label>
-                    <input type="text" id="savedTextName" name="savedTextName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <textarea id='newTextTextArea' class="h-75 w-100 mt-1" placeholder="new text">{{ (isset($textToSetInInputTextBox)) ? $textToSetInInputTextBox : '' }}</textarea>
 
-                </div>
+            <script>
+                //send value to patch form
+                newTextTextArea = document.getElementById('newTextTextArea');
+                newTextInputTextBox = document.getElementById('inputTextBox');
 
-                <label>
-                    <input type="text" name="inputTextBox" id="inputTextBox"
-                           value="{{(isset($textToSetInInputTextBox))?$textToSetInInputTextBox:''}}">
-                </label>
+                newTextTextArea.addEventListener('input', function () {
+                    newTextInputTextBox.value = newTextTextArea.value;
+                })
 
-                {{--            <label>--}}
-                {{--                <input type="text" name="savedTextID" id="savedTextID" style="display: n"--}}
-                {{--                       value="{{(isset($savedTextID))?$savedTextID:''}}">--}}
-                {{--            </label>--}}
-
-                <label>
-                    <input type="submit" name="submitInputTextBoxButton" id="submitInputTextBoxButton" class="btn btn-primary">
-                </label>
-            </form>
-        </div>
-    </li>
+            </script>
+        </li>
+    @endif
 </ul>
+
+{{ $paginatedSavedTexts->links() }}
 
 <style>
     .grid-container {

@@ -16,31 +16,28 @@
 <?php
 
     //сетим див с текстом из апи
-
 if (!empty($textToCompare)) {
     echo "<div style='display: none';>";
-//    текст с которым сравнивается инпут при каждом напечатанном символе
+    //текст с которым сравнивается инпут при каждом напечатанном символе
     echo "textToCompare: <div id='textToCompare'>{$textToCompare}</div><br>";
 
     $lenOfCompareText = strlen($textToCompare);
     echo "<div style='float: left';> Length of compare text:</div> <div id='lenOfFullText';> {$lenOfCompareText}</div> <br>";
-} else {
-    echo "text to compare is empty <br>";
 }
 echo "</div>";
+
 ?>
 
 <x-app-layout>
-<dialog id="dialogBox" class="content-around">
-    <div class="flex justify-center items-center h-full flex-col">
-        <p>Your speed result:</p>
-        <p id="dialogMessage" class="inline"></p>
-        <p>symbols/second</p>
-        <br>
-        <button onclick="closeDialog()" class="bg-blue-900 ">Close</button>
-    </div>
-
-</dialog>
+{{--<dialog id="dialogBox" class="content-around">--}}
+{{--    <div class="flex justify-center items-center h-full flex-col">--}}
+{{--        <p>Your speed result:</p>--}}
+{{--        <p id="dialogMessage" class="inline"></p>--}}
+{{--        <p>symbols/second</p>--}}
+{{--        <br>--}}
+{{--        <button onclick="closeDialog()" class="bg-blue-900 ">Close</button>--}}
+{{--    </div>--}}
+{{--</dialog>--}}
 {{--    <div style="color:#11998e" id="speedForLine">speedForLine</div>--}}
 
 <script>
@@ -50,24 +47,25 @@ echo "</div>";
     }
 </script>
 
-<div class="container-fluid d-flex flex-column align-items-center vh-100">
+<div class="container-fluid d-flex flex-column align-items-center ">
+
 
     <div id="outputInfo" style="font-size: 30px; color:#11998e">
-        <span id="currentLineSpeed" style="color:#11998e">{{ (isset($latest_type_result_speed))?$latest_type_result_speed:'---' }}</span>
-        <span style="color:#11998e"> (</span>
-        <span id="previousTypeSpeed" style="color:#11998e">{{ (isset($previousBestSpeed))?$previousBestSpeed:'' }}</span>
-        <span style="color:#11998e">)</span>
-
+{{--        <span>best result:</span>--}}
+        <span id="bestTypeSpeed" style="color:#11998e">{{ (isset($bestSpeedForTypeResult))?intval($bestSpeedForTypeResult):'---' }}</span>
         <span>/</span>
+        <span id="bestSpeedNumberOfMistakesSpan" style="color:#11998e">{{ (isset($numberOfMistakesForBestTypeResult))?$numberOfMistakesForBestTypeResult:'---' }}</span>
+    </div>
 
-        <span id="numberOfMistakesSpan" style="color:#11998e">---</span>
-        <span style="color:#11998e"> (</span>
-        <span id="previousNumberOfMistakesSpan" style="color:#11998e">200</span>
-        <span style="color:#11998e">)</span>
+    <div id="outputInfo" style="font-size: 30px; color:#11998e">
+        {{--        <span>current result:</span>--}}
+        <span id="currentLineSpeed" style="color:#11998e">{{ (isset($latest_type_result_speed))?intval($latest_type_result_speed):'---' }}</span>
+        <span>/</span>
+        <span id="numberOfMistakesSpan" style="color:#11998e">{{ (isset($latest_type_result_number_of_mistakes))?$latest_type_result_number_of_mistakes:'---' }}</span>
     </div>
 
 {{--    <p>{{$updateInfo}}</p>--}}
-    <div style="display: none">
+    <div style="display: none ">
         <form method="POST" action="{{route('TypeTestController.store')}}">
             @csrf
             <input type="text" id="outputSpeed" name="outputSpeed" placeholder="outputSpeed"
@@ -110,40 +108,23 @@ echo "</div>";
             </label>
 
             <label>
-                <input type="text" name="savedTextID" id="savedTextID" style="display: n"
+                <input type="text" name="savedTextID" id="savedTextID" style="display: none"
                     value="{{(isset($savedTextID))?$savedTextID:''}}">
             </label>
 
             <label>
                 <input type="submit" name="submitInputTextBoxButton" id="submitInputTextBoxButton" class="btn btn-primary">
             </label>
-        </form>
     </div>
 
     <div>
 
-{{--        <div class="form__group field">--}}
-{{--            <input type="input" class="form__field" placeholder="Name" name="name" id='name' required />--}}
-{{--            <label for="name" class="form__label">Name</label>--}}
-
-{{--            <label for="typeTextInputField"></label>--}}
-{{--            <input class="form__field" autocomplete="off" type="text" id="typeTextInputField">--}}
-{{--                   oninput="window.typeTextInputFieldUpdated()" style="width: 800px; ">--}}
-
-{{--        </div>--}}
         <label for="typeTextInputField"></label>
         <input class="form__field" autocomplete="off" type="input" id="typeTextInputField"
         oninput="window.typeTextInputFieldUpdated()" style="width: 770px; ">
 
-{{--        <label for="typeTextInputField"></label>--}}
-{{--        <input autocomplete="off" type="text" id="typeTextInputField" class="form-control p-3 "--}}
-{{--               oninput="window.typeTextInputFieldUpdated()" style="width: 800px; ">--}}
     </div>
-{{--    <div>--}}
-{{--        <br><br>--}}
-{{--        <!-- debug typed text -->--}}
-{{--        <p id="debug_typedTextOutputDisplayNone" style="display: none"></p>--}}
-{{--    </div>--}}
+
     <div id="chars wrapper" style="width: 770px;">
         @include('type_components.text_to_type_in_dynamic_color_chars')
     </div>
@@ -163,7 +144,7 @@ echo "</div>";
 </form>
 
     <!-- important for typing to work -->
-    <div id="numberOfCharsLeft" style="color:#11998e display: none">92</div>
+    <div id="numberOfCharsLeft" style="color:#11998e; display: none">92</div>
 
     <!-- debug div -->
 {{--    <div id="numberOfLine" style="color:#11998e">1</div>--}}
@@ -188,15 +169,8 @@ echo "</div>";
     const timer = document.getElementById('timer')
     const submitButton = document.getElementById('submitInputTextBoxButton')
     const textID = document.getElementById('savedTextID')
-    const textId = document.getElementById('savedTextId')
 
     typeTextInputField.addEventListener('input', function () {
-        if(typeTextInputField.value.length === 1 && timer.value === "") {
-            StartTimer();
-        }
-        if(textID.value !== "") {
-            textId.value = textID.value;
-        }
     });
 
     //hide open saved text name
@@ -204,28 +178,6 @@ echo "</div>";
     const savedTextName = document.getElementById('savedTextName')
     const textNameDiv = document.getElementById('textNameDiv')
     const alertDiv = document.getElementById('alert');
-
-    checkbox.addEventListener("click", function () {
-        if(checkbox.checked) {
-            textNameDiv.style = '';
-        }
-        else {
-            textNameDiv.style = 'visibility: hidden';
-        }
-    });
-
-    savedTextName.addEventListener('input', function() {
-        if (savedTextName.value.length > 15) {
-            savedTextName.value = savedTextName.value.slice(0, 15);
-            alertDiv.classList.remove('hidden');
-        } else {
-            alertDiv.classList.add('hidden');
-        }
-    });
-
-    function closeAlert() {
-        alertDiv.classList.add('hidden');
-    }
 
     function Timer(fn, t) {
         let timerObj = setInterval(fn, t);

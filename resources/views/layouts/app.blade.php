@@ -26,7 +26,7 @@
 
 </head>
 <body class="font-sans antialiased">
-<div id="page" class="bg-gray-100 dark:bg-gray-800">
+<div id="page" class="bg-gray-1000 dark:bg-gray-800">
     @include('layouts.navigation') <!-- Include your navigation partial -->
 
     <!-- Page Heading -->
@@ -39,9 +39,9 @@
     @endif
 
     <!-- Page Content -->
-    <main>
-        {{ $slot }}
-    </main>
+    <body style="background-color: #1f2937;">
+    {{ $slot }}
+    </body>
 </div>
 
 <!-- Additional JavaScript libraries and custom scripts -->

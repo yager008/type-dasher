@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SavedText;
 use App\Models\TypeResult;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -55,12 +56,22 @@ class TypeTestController extends Controller
         $bestSpeed = Session::get('bestSpeed');
         $savedTextID = Session::get('savedTextID');
 
-        if(isset(TypeResult::latest('id')->first()->result)) {
-           $latest_type_result_speed = TypeResult::latest('id')->first()->result;
-        }
-        else {
-            $latest_type_result_speed = 0;
-        }
+        $latest_type_result_speed = '---';
+        $latest_type_result_number_of_mistakes = '---';
+
+
+//        if(isset(TypeResult::latest('id')->first()->result)) {
+//           $latest_type_result_speed = TypeResult::latest('id')->first()->result;
+//        }
+//        else {
+//            $latest_type_result_speed = '---';
+//        }
+//        if(isset(TypeResult::latest('id')->first()->number_of_mistakes)) {
+//            $latest_type_result_number_of_mistakes = TypeResult::latest('id')->first()->number_of_mistakes;
+//        }
+//        else {
+//            $latest_type_result_number_of_mistakes = '---';
+//        }
 
         if ($bSavedTextUpdate) {
 //            Session::remove('savedText');
@@ -105,6 +116,7 @@ class TypeTestController extends Controller
         Session::remove('bFromStoreResult');
 
         // $type_results = type_result::pluck('result')->toArray();
+
         $type_results = TypeResult::where('user_id', auth::user()['id'])
             ->get(['updated_at', 'result', 'number_of_mistakes']);
 
@@ -119,12 +131,21 @@ class TypeTestController extends Controller
 
         })->toArray();
 
-        $saved_texts = SavedText::where('user_id', auth::user()['id'])
-            ->get(['id', 'text', 'text_name', 'best_speed']);
+        $numberOfMistakesForBestTypeResult = 0;
+        $bestSpeedForTypeResult = 0;
+        if(isset($savedTextID)) {
+            if (SavedText::find($savedTextID)->best_type_result_id != -1) {
+                $numberOfMistakesForBestTypeResult = TypeResult::find(SavedText::find($savedTextID)->best_type_result_id)->number_of_mistakes;
+            }
+
+            if (SavedText::find($savedTextID)->best_type_result_id != -1) {
+                $bestSpeedForTypeResult = TypeResult::find(SavedText::find($savedTextID)->best_type_result_id)->result;
+            }
+        }
 
         $name = auth()->user();
 
-        return view('type', compact('resultsArray', 'saved_texts', 'textToSetInInputTextBox', 'textToCompare', 'bShouldStartTimer', 'name', 'idOfSavedText', 'bShowDialogBoxWithResult', 'dialogBoxContent', 'savedText', 'savedTextName', 'bestSpeed', 'savedTextID', 'updateInfo', 'previousBestSpeed', 'latest_type_result_speed'));
+        return view('type', compact('resultsArray',  'textToSetInInputTextBox', 'textToCompare', 'bShouldStartTimer', 'name', 'idOfSavedText', 'bShowDialogBoxWithResult', 'dialogBoxContent', 'savedText', 'savedTextName', 'bestSpeed', 'savedTextID', 'updateInfo', 'previousBestSpeed', 'latest_type_result_speed' , 'numberOfMistakesForBestTypeResult' , 'latest_type_result_number_of_mistakes', 'bestSpeedForTypeResult'));
     }
 
     public function statistics()
@@ -148,11 +169,11 @@ class TypeTestController extends Controller
         return view('charts', compact('resultsArray'));
     }
 
-    public function savedTexts()
+    public function savedTexts(Request $request)
     {
-
         $bibleApiResponse = Session::get('bibleApiResponse');
         $loremApiResponse = Session::get('loremApiResponse');
+
         Session::remove('bibleApiResponse');
         Session::remove('loremApiResponse');
 
@@ -166,10 +187,49 @@ class TypeTestController extends Controller
             $textToSetInInputTextBox = $savedText;
         }
 
-        $saved_texts = SavedText::where('user_id', auth::user()['id'])
-            ->get(['id', 'text', 'text_name', 'best_speed']);
 
-        return view('savedTexts', compact('saved_texts' , 'textToSetInInputTextBox'));
+        $saved_texts = SavedText::where('user_id', auth()->user()->id)->get();
+
+// Loop through each saved text and add the 'number_of_mistakes_for_best_type_result' field
+        foreach ($saved_texts as $saved_text) {
+            $saved_text->number_of_mistakes_for_best_type_result = 0; // Default value
+
+            if ($saved_text->best_type_result_id != -1) {
+                $bestTypeResult = TypeResult::find($saved_text->best_type_result_id);
+                if ($bestTypeResult) {
+                    $saved_text->number_of_mistakes_for_best_type_result = $bestTypeResult->number_of_mistakes;
+                }
+            }
+
+            $saved_text->is_create_form = false;
+        }
+
+        $pseudo_item = [
+            'id' => null,
+            'text' => '',
+            'best_speed' => '',
+            'text_name' => '',
+            'is_create_form' => true, // Flag to identify this pseudo item
+            'number_of_mistakes_for_best_type_result' => null, // Pseudo item should not have mistakes
+        ];
+
+        $saved_texts->push((object)$pseudo_item);
+
+
+        // Manually paginate the collection
+        $perPage = 6;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentPageItems = $saved_texts->slice(($currentPage - 1) * $perPage, $perPage)->all();
+
+        $paginatedSavedTexts = new LengthAwarePaginator(
+            $currentPageItems,
+            $saved_texts->count(),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
+        return view('savedTexts', compact('paginatedSavedTexts', 'textToSetInInputTextBox'));
     }
 
 
@@ -188,8 +248,17 @@ class TypeTestController extends Controller
 
         $data['numberOfMistakes'] = $data['numberOfMistakes'] ?? '0';
 
+        $latest_type_result = TypeResult::create([
+            'result' => $data['outputSpeed'],
+            'username' => auth()->user()['name'],
+            'user_id' => auth()->user()['id'],
+            'number_of_mistakes' => $data['numberOfMistakes'],
+            'user_local_time' => 'time'
+        ]);
+
         if ($data['savedTextId'] !== null) {
             Session::put('bSavedTextUpdate', 'true');
+
             $savedText = SavedText::find($data['savedTextId']);
 
             $currentBestSpeed = $savedText->best_speed;
@@ -200,16 +269,11 @@ class TypeTestController extends Controller
             if ($data['outputSpeed'] > $currentBestSpeed) {
                 // If the new speed is better, update the record with the new best speed
                 $savedText->update(['best_speed' => $data['outputSpeed']]);
+                $savedText->best_type_result_id = $latest_type_result->id;
+                $savedText->save();
             }
         }
 
-        TypeResult::create([
-            'result' => $data['outputSpeed'],
-            'username' => auth()->user()['name'],
-            'user_id' => auth()->user()['id'],
-            'number_of_mistakes' => $data['numberOfMistakes'],
-            'user_local_time' => 'time'
-        ]);
 
         return redirect()->route("TypeTestControllerPost.type");
     }
@@ -220,7 +284,57 @@ class TypeTestController extends Controller
 
         SavedText::destroy($buttonValue);
 
-        return redirect()->route("TypeTestController.savedTexts");
+        // Get the HTTP referrer
+        $referrer = $request->header('referer');
+
+        // Initialize an array to hold query parameters
+        $queryParams = [];
+
+        if ($referrer) {
+            // Parse the URL to get components
+            $urlComponents = parse_url($referrer);
+
+            // Check if there is a query string in the referrer URL
+            if (isset($urlComponents['query'])) {
+                // Parse the query string into an associative array
+                parse_str($urlComponents['query'], $queryParams);
+            }
+        }
+
+        return redirect()->route("TypeTestController.savedTexts", $queryParams);
+    }
+
+    public function updateSavedText(Request $request)
+    {
+        // Get the HTTP referrer
+        $referrer = $request->header('referer');
+
+        // Initialize an array to hold query parameters
+        $queryParams = [];
+
+        if ($referrer) {
+            // Parse the URL to get components
+            $urlComponents = parse_url($referrer);
+
+            // Check if there is a query string in the referrer URL
+            if (isset($urlComponents['query'])) {
+                // Parse the query string into an associative array
+                parse_str($urlComponents['query'], $queryParams);
+            }
+        }
+
+        $data = request()->validate([
+            "savedTextID" => 'int',
+            "savedText" => 'string',
+            "updatedText" => 'string',
+        ]);
+
+        $savedText = SavedText::find($data['savedTextID']);
+
+        $savedText->update(['text'=> $data['updatedText']]);
+        $savedText->save();
+
+        return redirect()->route("TypeTestController.savedTexts", $queryParams);
     }
 
     public function openSavedText(Request $request)
@@ -305,7 +419,8 @@ class TypeTestController extends Controller
         $saved_text = SavedText::create([
             'text' => $data['inputTextBox'],
             'text_name' => $data['savedTextName'],
-            'user_id' => auth()->user()['id']
+            'user_id' => auth()->user()['id'],
+            'best_type_result_id' => -1
         ]);
 
         Session::put('idOfSavedText', $saved_text['id']);
@@ -313,6 +428,23 @@ class TypeTestController extends Controller
         Session::put('textToCompare', $data['inputTextBox']);
         Session::put('bShouldStartTimer', true);
 
-        return redirect()->route("TypeTestController.savedTexts");
+        // Get the HTTP referrer
+        $referrer = $request->header('referer');
+
+        // Initialize an array to hold query parameters
+        $queryParams = [];
+
+        if ($referrer) {
+            // Parse the URL to get components
+            $urlComponents = parse_url($referrer);
+
+            // Check if there is a query string in the referrer URL
+            if (isset($urlComponents['query'])) {
+                // Parse the query string into an associative array
+                parse_str($urlComponents['query'], $queryParams);
+            }
+        }
+
+        return redirect()->route("TypeTestController.savedTexts", $queryParams);
     }
 }

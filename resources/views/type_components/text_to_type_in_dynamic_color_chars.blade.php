@@ -13,6 +13,8 @@ if(isset($lenOfCompareText)) {
         $numberOfChartsWithoutLineBreak++;
 
         if(isset($textToCompare)) {
+            $isTilda = false;
+
             if ($textToCompare[$i] == " ") {
 
                 if($numberOfChartsWithoutLineBreak > 110) {
@@ -34,18 +36,41 @@ if(isset($lenOfCompareText)) {
                     echo "</span>";
                     echo "<div id='space' style='float: left; background-color: #ffffff; opacity: .0;'>&nbsp;</div>";
 //                    echo "<span>\u00A0</span>";
-
                     echo "<span class='word'>";
-
                 }
-
-
             }
+
+            elseif ($textToCompare[$i] == "~") {
+                $b0nlyOneLine = false;
+                $isTilda = true;
+
+                echo "</span>";
+                echo "<br>";
+                echo "<div id='numberOfCharsInLine{$numberOfCurrentLine}' name='line' style='display: none'>{$numberOfChartsWithoutLineBreak}</div>";
+                echo "</span>";
+
+                $numberOfChartsWithoutLineBreak = 0;
+                $numberOfCurrentLine++;
+
+                echo "<span class='line' id='line{$numberOfCurrentLine}'>";
+                echo "<span class='word'>";
+            }
+
+            if (!$isTilda) {
             echo "
                 <div id='char{$i}' style='color: blue; float: left'>
                     {$textToCompare[$i]}
                 </div>
                 ";
+            }
+            else {
+                $textToCompare[$i] = " ";
+                echo "
+                <div id='char{$i}' style='color: blue; float: left'>
+                </div>
+                ";
+
+            }
         }
         else {
             echo 'variable $textToCompare is not defined in parent file';
@@ -59,6 +84,6 @@ if(isset($lenOfCompareText)) {
     echo "</span>";
     echo "<br>";
     echo "</span>";
-    echo "<div id='numberOfCharsInLine{$numberOfCurrentLine}' name='lastLine'>{$numberOfChartsWithoutLineBreak}</div>";
+    echo "<div style='display:none' id='numberOfCharsInLine{$numberOfCurrentLine}' name='lastLine'>{$numberOfChartsWithoutLineBreak}</div>";
 }
 
