@@ -33,9 +33,7 @@
         <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;">2</button>
         <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
     </div>
-
     <div class="d-flex p-2 m-4 " style="background-color: #0a58ca ">I'm a flexbox container!</div>
-
     <a class="icon-link icon-link-hover" style="--bs-link-hover-color-rgb: 25, 135, 84;" href="#">
         Icon link
         <svg class="bi" aria-hidden="true"><use xlink:href="#arrow-right"></use></svg>
